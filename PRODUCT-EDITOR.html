@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Samad Bags - Product Editor</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f5f5f5;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            color: #1a365d;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 30px;
+        }
+
+        .editor-box {
+            background: white;
+            border-radius: 10px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        h2 {
+            color: #d4a574;
+            margin-bottom: 20px;
+            font-size: 1.3rem;
+        }
+
+        .product-form {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group.full-width {
+            grid-column: span 2;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 600;
+            color: #333;
+        }
+
+        input, select, textarea {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e2e8f0;
+            border-radius: 5px;
+            font-size: 14px;
+            transition: border-color 0.3s;
+        }
+
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: #d4a574;
+        }
+
+        .price-hint {
+            font-size: 12px;
+            color: #666;
+            margin-top: 5px;
+        }
+
+        .btn {
+            padding: 12px 30px;
+            background: #d4a574;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 600;
+            transition: background 0.3s;
+        }
+
+        .btn:hover {
+            background: #1a365d;
+        }
+
+        .code-output {
+            background: #1a1a2e;
+            color: #00ff88;
+            padding: 20px;
+            border-radius: 5px;
+            font-family: 'Courier New', monospace;
+            font-size: 13px;
+            overflow-x: auto;
+            white-space: pre-wrap;
+            margin-top: 20px;
+            display: none;
+        }
+
+        .code-output.show {
+            display: block;
+        }
+
+        .instructions {
+            background: #e6f7ff;
+            border-left: 4px solid #1890ff;
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 0 5px 5px 0;
+        }
+
+        .instructions h3 {
+            color: #1890ff;
+            margin-bottom: 10px;
+        }
+
+        .instructions ol {
+            margin-left: 20px;
+            color: #333;
+        }
+
+        .instructions li {
+            margin-bottom: 8px;
+        }
+
+        .preview {
+            background: #f0f0f0;
+            padding: 20px;
+            border-radius: 5px;
+            margin-top: 20px;
+        }
+
+        .preview h3 {
+            margin-bottom: 15px;
+            color: #333;
+        }
+
+        .product-card-preview {
+            background: white;
+            border-radius: 8px;
+            padding: 15px;
+            max-width: 300px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 3px 10px;
+            border-radius: 15px;
+            font-size: 12px;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+
+        .badge.new { background: #48bb78; color: white; }
+        .badge.sale { background: #e53e3e; color: white; }
+        .badge.bestseller { background: #d4a574; color: white; }
+
+        .product-name { font-weight: 600; font-size: 1.1rem; margin-bottom: 5px; }
+        .product-category { color: #666; font-size: 0.9rem; }
+        .product-price { margin-top: 10px; }
+        .current-price { font-weight: 700; color: #d4a574; font-size: 1.2rem; }
+        .old-price { text-decoration: line-through; color: #999; margin-right: 10px; }
+
+        @media (max-width: 768px) {
+            .product-form {
+                grid-template-columns: 1fr;
+            }
+            .form-group.full-width {
+                grid-column: span 1;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Samad Bags - Product Editor</h1>
+        <p class="subtitle">Add or edit products for your website</p>
+
+        <div class="instructions">
+            <h3>📋 Quick Instructions</h3>
+            <ol>
+                <li>Fill out the form below with your product details</li>
+                <li>Click "Generate Code" to see the code</li>
+                <li>Open <strong>products.js</strong> in a text editor</li>
+                <li>Paste the generated code inside the <code>const products = [</code> array</li>
+                <li>Add your product image to the <strong>images/</strong> folder</li>
+                <li>Save and refresh your website!</li>
+            </ol>
+        </div>
+
+        <div class="editor-box">
+            <h2>Add New Product</h2>
+            <form class="product-form" id="productForm">
+                <div class="form-group">
+                    <label>Product Name</label>
+                    <input type="text" id="productName" placeholder="e.g., Premium Leather Backpack" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Category</label>
+                    <select id="productCategory" required>
+                        <option value="backpacks">Backpacks</option>
+                        <option value="luggage">Luggage</option>
+                        <option value="handbags">Handbags</option>
+                        <option value="briefcases">Briefcases</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>Price (in ₹ Rupees)</label>
+                    <input type="number" id="productPrice" placeholder="e.g., 14900" required>
+                    <div class="price-hint">Enter price in paise (₹14,900 = 14900)</div>
+                </div>
+
+                <div class="form-group">
+                    <label>Old Price (for sale)</label>
+                    <input type="number" id="productOldPrice" placeholder="Leave blank if not on sale">
+                    <div class="price-hint">Leave empty if not on sale</div>
+                </div>
+
+                <div class="form-group">
+                    <label>Image Filename</label>
+                    <input type="text" id="productImage" placeholder="e.g., bag7.jpg" required>
+                    <div class="price-hint">File should be in images/ folder</div>
+                </div>
+
+                <div class="form-group">
+                    <label>Badge</label>
+                    <select id="productBadge">
+                        <option value="">None</option>
+                        <option value="New">New</option>
+                        <option value="Sale">Sale</option>
+                        <option value="Bestseller">Bestseller</option>
+                    </select>
+                </div>
+
+                <div class="form-group full-width">
+                    <label>Description</label>
+                    <textarea id="productDescription" rows="2" placeholder="Short description of the bag..."></textarea>
+                </div>
+
+                <div class="form-group full-width">
+                    <button type="submit" class="btn">Generate Product Code</button>
+                </div>
+            </form>
+
+            <div class="preview" id="preview" style="display: none;">
+                <h3>Preview:</h3>
+                <div class="product-card-preview" id="previewCard">
+                    <!-- Preview will appear here -->
+                </div>
+            </div>
+
+            <div class="code-output" id="codeOutput"></div>
+        </div>
+
+        <div class="editor-box">
+            <h2>Price Reference</h2>
+            <table style="width: 100%; border-collapse: collapse;">
+                <thead>
+                    <tr style="background: #1a365d; color: white;">
+                        <th style="padding: 10px; text-align: left;">Rupees (₹)</th>
+                        <th style="padding: 10px; text-align: left;">Paise (Enter this)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr style="border-bottom: 1px solid #eee;">
+                        <td style="padding: 10px;">₹1,000</td>
+                        <td style="padding: 10px;"><code>100000</code></td>
+                    </tr>
+                    <tr style="border-bottom: 1px solid #eee;">
+                        <td style="padding: 10px;">₹5,000</td>
+                        <td style="padding: 10px;"><code>500000</code></td>
+                    </tr>
+                    <tr style="border-bottom: 1px solid #eee;">
+                        <td style="padding: 10px;">₹10,000</td>
+                        <td style="padding: 10px;"><code>1000000</code></td>
+                    </tr>
+                    <tr style="border-bottom: 1px solid #eee;">
+                        <td style="padding: 10px;">₹14,900</td>
+                        <td style="padding: 10px;"><code>1490000</code></td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 10px;">₹25,000</td>
+                        <td style="padding: 10px;"><code>2500000</code></td>
+                    </tr>
+                </tbody>
+            </table>
+            <p style="margin-top: 15px; color: #666;">
+                <strong>Formula:</strong> Remove the ₹ symbol and comma, then multiply by 100<br>
+                Example: ₹14,900 → 14900 × 100 = <strong>1490000</strong>
+            </p>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('productForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            const name = document.getElementById('productName').value;
+            const category = document.getElementById('productCategory').value;
+            const price = document.getElementById('productPrice').value;
+            const oldPrice = document.getElementById('productOldPrice').value;
+            const image = document.getElementById('productImage').value;
+            const badge = document.getElementById('productBadge').value;
+            const description = document.getElementById('productDescription').value;
+
+            // Generate product ID (next available)
+            const id = Math.floor(Math.random() * 1000) + 7;
+
+            // Generate code
+            const code = `{
+        id: ${id},
+        name: "${name}",
+        category: "${category}",
+        price: ${price},${oldPrice ? '\n        oldPrice: ' + oldPrice + ',' : ''}
+        image: "images/${image}",
+        badge: ${badge ? '"' + badge + '"' : 'null'},
+        description: "${description || name}",
+        inStock: true
+    }`;
+
+            // Show code
+            const output = document.getElementById('codeOutput');
+            output.textContent = code + ',';
+            output.classList.add('show');
+
+            // Show preview
+            const preview = document.getElementById('preview');
+            const previewCard = document.getElementById('previewCard');
+
+            const formattedPrice = '₹' + (price/100).toLocaleString('en-IN');
+            const formattedOldPrice = oldPrice ? '₹' + (oldPrice/100).toLocaleString('en-IN') : '';
+
+            previewCard.innerHTML = `
+                ${badge ? `<span class="badge ${badge.toLowerCase()}">${badge}</span>` : ''}
+                <div class="product-name">${name}</div>
+                <div class="product-category">${category.charAt(0).toUpperCase() + category.slice(1)}</div>
+                <div class="product-price">
+                    ${oldPrice ? `<span class="old-price">${formattedOldPrice}</span>` : ''}
+                    <span class="current-price">${formattedPrice}</span>
+                </div>
+            `;
+            preview.style.display = 'block';
+
+            // Scroll to output
+            output.scrollIntoView({ behavior: 'smooth' });
+        });
+    </script>
+</body>
+</html>
