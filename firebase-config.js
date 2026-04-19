@@ -10,15 +10,7 @@
  * STEP 7: Get your Firebase config and replace the values below
  */
 
-// Your Firebase config - REPLACE THESE WITH YOUR VALUES FROM FIREBASE CONSOLE
-const firebaseConfig = {
-    apiKey: "AIzaSyBxuTcsslqPv6ERC8gVsZrAYQbStGRfH8g",
-    authDomain: "samad-bags.firebaseapp.com",
-    projectId: "samad-bags",
-    storageBucket: "samad-bags.firebasestorage.app",
-    messagingSenderId: "1058715228785",
-    appId: "1:1058715228785:web:0b1d71b9daafac299099d0"
-};
+// Your Firebase config - REPLACE THESE WITH YOUR VALUES FROM FIREBASE CONSOL
 
 // Initialize Firebase (only if not already initialized)
 if (typeof firebase !== 'undefined' && !firebase.apps.length) {
